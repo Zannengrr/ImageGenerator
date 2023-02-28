@@ -8,6 +8,8 @@ Opening ImageGenerator.sln in Visual Studio and running either a Debug or Publis
 Opening ImageGenerator folder in Visual Studio Code and running ".NET Core Launch (console)" option from Run and Debug window
 
 The input file is in json format as this example:
+
+```json
 {
     "regions": [
         {
@@ -52,6 +54,7 @@ The input file is in json format as this example:
         "y": 4
     }
 }
+```
 
 Taken from the information of the assignment.
 
