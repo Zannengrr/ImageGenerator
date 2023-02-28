@@ -63,9 +63,9 @@ By default the project autogenerates a Data folder inside of the published folde
 
 The project is ran from the Program.cs
 The project is structured into 3 folders:
-	Data
-	Model
-	Services
+- Data
+- Model
+- Services
 
 Data has Input.txt and Input-Example.txt files that are copied into the published/debug folders and Input.txt file is used as the input file.
 Model has files that are data models used in the project.
