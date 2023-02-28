@@ -3,10 +3,28 @@
 using Newtonsoft.Json;
 using ImageGenerator.Services;
 using System.Drawing.Imaging;
+using ImageGenerator.Model;
 
-string inputFilePath = $"{Environment.CurrentDirectory}/Data/Input.txt";
-string file = File.ReadAllText(inputFilePath);
+//Modify for paths and filenames
+string dataDirectoryname = "Data";
+string inputFileName = "Input.txt";
+string outputFileName = "Output.jpeg";
+string currentDataDir = $"{Environment.CurrentDirectory}/{dataDirectoryname}";
+ImageFormat format = ImageFormat.Jpeg;
+//
 
-ImageCreator? imageCreator = JsonConvert.DeserializeObject<ImageCreator>(file);
+Directory.CreateDirectory($"{currentDataDir}");
+string inputFilePath = $"{currentDataDir}/{inputFileName}";
+string outputFilePath = $"{currentDataDir}/{outputFileName}";
 
-imageCreator?.CreateImage(ImageFormat.Jpeg);
+if (!File.Exists(inputFilePath))
+{
+    Console.WriteLine($"Input.txt file is missing, please add the file to {currentDataDir} folder and run the program again");
+}
+else
+{
+    string file = File.ReadAllText(inputFilePath);
+    Image? imageData = JsonConvert.DeserializeObject<Image>(file);
+    if(imageData is not null) new ImageCreator().CreateImage(imageData, format, outputFilePath);
+    Console.WriteLine($"Image has been generated in {outputFilePath}");
+}

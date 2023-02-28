@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 using ImageGenerator.Model;
+using Image = ImageGenerator.Model.Image;
 using Region = ImageGenerator.Model.Region;
 using Size = ImageGenerator.Model.Size;
 
@@ -8,41 +9,29 @@ namespace ImageGenerator.Services
 {
     public class ImageCreator
     {
-        public Size Size { get; set; }
-        public List<Region> Regions { get; set; } = new List<Region>();
-
-        public ImageCreator(Size size, List<Region> regions)
-        {
-            Size = new(size);
-            foreach (Region region in regions)
-            {
-                Regions.Add(new Region(region));
-            }
-        }
-
         //add a library that works on all platforms
-        public void CreateImage(ImageFormat outputFormat)
+        public void CreateImage(Image imageData, ImageFormat outputFormat, string outputPath)
         {
-            Position centerOffset = new Position((1 / ((double)Size.X * 2)), (1 / ((double)Size.Y * 2))); //method to calculate center offset
-            Bitmap image = new(Size.X, Size.Y);
-            int yCoordinateSystemConversion = image.Height - 1; //make a method to convert to a specific coordinate system
+            Position centerOffset = imageData.CalculateCenterOffset(); //move to Size class or make extension?
+            Position scale = new Position(1 / (double)imageData.Size.X, 1 / (double)imageData.Size.Y);
+            Bitmap image = new(imageData.Size.X, imageData.Size.Y); //see for a library that works on any platform
             for (int i = 0; i < image.Width; i++)
             {
                 for (int j = 0; j < image.Height; j++)
                 {
-                    foreach (Region region in Regions)
+                    foreach (Region region in imageData.Regions) //see if we should make an interesection of areas?
                     {
-                        if (region.IsPointInsideRegion(new Position(i / (double)Size.X + centerOffset.X, (j / (double)Size.Y) + centerOffset.Y)))
+                        int mappedY = image.Height - 1 - j;
+                        Position pixelToPoint = new Position(i * scale.X + centerOffset.X, j * scale.Y + centerOffset.Y);
+                        if (region.IsPointInsideRegion(pixelToPoint))
                         {
-                            image.SetPixel(i, yCoordinateSystemConversion - j, Color.White);
+                            image.SetPixel(i, mappedY, Color.White);
                             break;
                         }
-
-                        image.SetPixel(i, yCoordinateSystemConversion - j, Color.Black);
                     }
                 }
             }
-            image.Save($"{Environment.CurrentDirectory}/Data/Output.jpeg", outputFormat);
+            image.Save(outputPath, outputFormat);
         }
 
         //needs validation for data
