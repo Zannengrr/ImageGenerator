@@ -10,8 +10,6 @@ namespace ImageGenerator.Services
             List<Size> result = new();
 
             Position scale = Position.GetScaleStep(size.X, size.Y);
-            
-
             foreach (Region region in regions)
             {
                 List<Edge> GlobalEdgeTable = region.GetNonHorizontalEdges().OrderBy(edge => edge.Ymin).ThenBy(edge => edge.Xvalue).ToList();
