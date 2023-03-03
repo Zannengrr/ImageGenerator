@@ -1,13 +1,16 @@
 ﻿using ImageGenerator.Interfaces;
 using ImageGenerator.Model;
+using System.Drawing;
+using Region = ImageGenerator.Model.Region;
+using Size = ImageGenerator.Model.Size;
 
 namespace ImageGenerator.Services.PolygonFillServices
 {
     public class ScanLine : IRegionFillAlgorithm
     {
-        public List<Size> GetPixelsInsideRegions(List<Region> regions, Size size)
+        public List<Point> GetPixelsInsideRegions(List<Region> regions, Size size)
         {
-            List<Size> result = new();
+            List<Point> result = new();
 
             Position scale = Position.GetScaleStep(size.X, size.Y);
             foreach (Region region in regions)
@@ -28,15 +31,15 @@ namespace ImageGenerator.Services.PolygonFillServices
                     }
                     intersections.Sort();
 
-                    int pixelY = size.Y + 1 - (int)Math.Ceiling(y * (size.Y - 1) + 1);
+                    int pixelY = size.Y - 1 - (int)Math.Ceiling(y * (size.Y - 1));
                     for (int i = 0; i < intersections.Count - 1; i += 2)
                     {
 
-                        int xmin = (int)Math.Ceiling(intersections[i] * (size.X - 1) + 1);
-                        int xmax = (int)Math.Floor(intersections[i + 1] * (size.X - 1) + 1);
+                        int xmin = (int)Math.Ceiling(intersections[i] * (size.X - 1));
+                        int xmax = (int)Math.Floor(intersections[i + 1] * (size.X - 1));
                         for (int pixelX = xmin; pixelX <= xmax; pixelX++)
                         {
-                            result.Add(new Size(pixelX, pixelY));
+                            result.Add(new Point(pixelX, pixelY));
                         }
                     }
                 }

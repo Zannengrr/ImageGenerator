@@ -3,6 +3,7 @@
 using ImageGenerator.Interfaces;
 using ImageGenerator.Model;
 using ImageGenerator.Services;
+using ImageGenerator.Services.PolygonFillServices;
 using Newtonsoft.Json;
 using System.Drawing.Imaging;
 

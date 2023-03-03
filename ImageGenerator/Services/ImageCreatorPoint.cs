@@ -2,7 +2,6 @@
 using System.Drawing.Imaging;
 using ImageGenerator.Interfaces;
 using ImageData = ImageGenerator.Model.ImageData;
-using Size = ImageGenerator.Model.Size;
 
 namespace ImageGenerator.Services
 {
@@ -24,14 +23,14 @@ namespace ImageGenerator.Services
 
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
-            List<Size> polygonsTofill = regionFillAlgorithm.GetPixelsInsideRegions(image.Regions, image.Size);
+            List<Point> polygonsTofill = regionFillAlgorithm.GetPixelsInsideRegions(image.Regions, image.Size);
 
             watch.Stop();
             Console.WriteLine($"Time for algorithm to finish in miliseconds: {watch.ElapsedMilliseconds}");
 
-            foreach (Size pixel in polygonsTofill)
+            foreach (Point pixel in polygonsTofill)
             {
-                pixelImage.SetPixel(pixel.X - 1, pixel.Y-1, Color.White);
+                pixelImage.SetPixel(pixel.X, pixel.Y, Color.White);
             }
 
             pixelImage.Save(outputPath, outputFormat);
