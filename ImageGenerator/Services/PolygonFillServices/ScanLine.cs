@@ -11,8 +11,9 @@ namespace ImageGenerator.Services.PolygonFillServices
         public List<Point> GetPixelsInsideRegions(List<Region> regions, Size size)
         {
             List<Point> result = new();
-
             Position scale = Position.GetScaleStep(size.X, size.Y);
+            int sizeOffsetX = size.X - 1;
+            int sizeOffsetY = size.Y - 1;
             foreach (Region region in regions)
             {
                 for (double y = region.BoundingBox.Min.Y; y <= region.BoundingBox.Max.Y; y += scale.Y)
@@ -31,12 +32,12 @@ namespace ImageGenerator.Services.PolygonFillServices
                     }
                     intersections.Sort();
 
-                    int pixelY = size.Y - 1 - (int)Math.Ceiling(y * (size.Y - 1));
+                    int pixelY = sizeOffsetY - (int)Math.Ceiling(y * sizeOffsetY);
                     for (int i = 0; i < intersections.Count - 1; i += 2)
                     {
 
-                        int xmin = (int)Math.Ceiling(intersections[i] * (size.X - 1));
-                        int xmax = (int)Math.Floor(intersections[i + 1] * (size.X - 1));
+                        int xmin = (int)Math.Ceiling(intersections[i] * sizeOffsetX);
+                        int xmax = (int)Math.Floor(intersections[i + 1] * sizeOffsetX);
                         for (int pixelX = xmin; pixelX <= xmax; pixelX++)
                         {
                             result.Add(new Point(pixelX, pixelY));

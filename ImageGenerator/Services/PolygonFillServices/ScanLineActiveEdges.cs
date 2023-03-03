@@ -11,8 +11,10 @@ namespace ImageGenerator.Services
         public List<Point> GetPixelsInsideRegions(List<Region> regions, Size size)
         {
             List<Point> result = new();
-
             Position scale = Position.GetScaleStep(size.X, size.Y);
+            int sizeOffsetX = size.X - 1;
+            int sizeOffsetY = size.Y - 1;
+
             foreach (Region region in regions)
             {
                 List<Edge> GlobalEdgeTable = region.GetNonHorizontalEdges().OrderBy(edge => edge.Ymin).ThenBy(edge => edge.Xvalue).ToList();
@@ -31,11 +33,11 @@ namespace ImageGenerator.Services
                     ActiveEdgeTable.RemoveAll(edge => edge.Ymax <= y);
                     ActiveEdgeTable.Sort((e1, e2) => e1.Xvalue.CompareTo(e2.Xvalue));
 
-                    int mappedY = size.Y - 1 - (int)Math.Ceiling(y * (size.Y - 1));
+                    int mappedY = sizeOffsetY - (int)Math.Ceiling(y * sizeOffsetY);
                     for (int i = 0; i < ActiveEdgeTable.Count - 1; i += 2)
                     {
-                        int x1 = (int)Math.Ceiling(ActiveEdgeTable[i].Xvalue * (size.X - 1));
-                        int x2 = (int)Math.Floor(ActiveEdgeTable[i + 1].Xvalue * (size.X - 1));
+                        int x1 = (int)Math.Ceiling(ActiveEdgeTable[i].Xvalue * sizeOffsetX);
+                        int x2 = (int)Math.Floor(ActiveEdgeTable[i + 1].Xvalue * sizeOffsetX);
                         if (x1 < x2)
                         {
                             for (int x = x1; x <= x2; x++)
