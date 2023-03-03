@@ -2,12 +2,12 @@
 {
     public class BoundingBox
     {
-        public Position UpperRight { get; set; } = new();
-        public Position LowerLeft { get; set; } = new();
+        public Position Max { get; set; } = new();
+        public Position Min { get; set; } = new();
         public BoundingBox(Position maxPoints, Position minPoints)
         {
-            UpperRight = maxPoints;
-            LowerLeft = minPoints;
+            Max = maxPoints;
+            Min = minPoints;
         }
     }
 }
