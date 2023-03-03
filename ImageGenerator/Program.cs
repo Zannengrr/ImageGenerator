@@ -36,6 +36,6 @@ catch (Exception e)
 }
 finally
 {
-    Console.WriteLine("Press any key to exit app");
+    Console.WriteLine("Press Enter key to exit app");
     Console.Read();
 }
